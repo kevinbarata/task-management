@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.resto.dao.AuthDao">
+
+    <insert id="add" parameterType="com.project.resto.dto.AuthDto" useGeneratedKeys="true" keyProperty="id">
+        insert into resto.auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">email,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="status != null and status!= ''">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="status != null and status !=''">#{status},</if>
+        </trim>
+    </insert>
+
+    <select id="findCodeByEmail" resultType="com.project.resto.dto.AuthDto" parameterType="com.project.resto.dto.AuthDto">
+        SELECT  id as id,
+        email as email,
+        code as code,
+        status as status
+        FROM resto.auth
+        where
+                email = #{email}
+                and code = #{code}
+                and type = #{type}
+                and status = 1
+        order by id desc limit 1
+    </select>
+
+    <select id="get" resultType="com.project.resto.dto.AuthDto" parameterType="com.project.resto.dto.AuthDto">
+        SELECT  id as id,
+                'name' as name,
+                merk as merk,
+                qty as qty,
+                remark as remark,
+                status as status,
+                create_time as createTime,
+                update_time as updateTime
+        FROM resto.asset
+        <where>
+            1=1
+            <if test="id != null and id != '' ">
+             and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and 'name' = #{name}
+            </if>
+            <if test="merk != null and merk != ''">
+                and merk = #{merk}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <update id="update" parameterType="com.project.resto.dto.AuthDto">
+        update resto.asset
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="merk != null and merk != ''">merk = #{merk},</if>
+            <if test="qty != null and merk != ''">qty = #{qty},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+</mapper>

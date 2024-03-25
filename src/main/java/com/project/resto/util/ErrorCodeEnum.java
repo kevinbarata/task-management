@@ -7,9 +7,10 @@ public enum ErrorCodeEnum {
     , PHONE_WRONG(ErrorCodeEnum.ERROR_CODE + 3, "No Telp salah")
     , EMAIL_WRONG(ErrorCodeEnum.ERROR_CODE + 4, "Email salah")
     , PASSWORD_WRONG(ErrorCodeEnum.ERROR_CODE + 5, "Password harus berawalan huruf besar dan mengandung angka")
-    , EMAIL_REGISTERED(ErrorCodeEnum.ERROR_CODE + 4, "Email telah terdaftar")
-    , PHONE_REGISTERED(ErrorCodeEnum.ERROR_CODE + 4, "No. Hp telah terdaftar")
-    , USERNAME_REGISTERED(ErrorCodeEnum.ERROR_CODE + 4, "Username telah terdaftar")
+    , EMAIL_REGISTERED(ErrorCodeEnum.ERROR_CODE + 6, "Email telah terdaftar")
+    , PHONE_REGISTERED(ErrorCodeEnum.ERROR_CODE + 7, "No. Hp telah terdaftar")
+    , USERNAME_REGISTERED(ErrorCodeEnum.ERROR_CODE + 8, "Username telah terdaftar")
+    , AUTH_WRONG(ErrorCodeEnum.ERROR_CODE + 9, "Authentikasi salah")
     ;
 
     public static final String ERROR_CODE = "01000";

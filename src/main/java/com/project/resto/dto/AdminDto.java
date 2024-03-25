@@ -14,6 +14,7 @@ public class AdminDto {
     private int status;
     private String remark;
     private String adminType;
+    private int code;
 
     private Date createTime;
     private Date updateTime;

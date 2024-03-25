@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -26,7 +29,6 @@ public class AdminServiceImpl implements AdminService {
         AdminDto adminDtoEmail = new AdminDto();
         adminDtoEmail.setEmail(adminDto.getEmail());
         List<AdminDto> checkByEmail = adminDao.get(adminDtoEmail);
-        logger.info("checkByEmail = " + checkByEmail);
         if (checkByEmail.size() != 0) {
             return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.EMAIL_REGISTERED);
         }
@@ -34,7 +36,6 @@ public class AdminServiceImpl implements AdminService {
         AdminDto adminDtoPhone = new AdminDto();
         adminDtoPhone.setPhone(adminDto.getPhone());
         List<AdminDto> checkByPhone = adminDao.get(adminDtoPhone);
-        logger.info("checkByPhone = " + checkByPhone);
         if (checkByPhone.size() != 0) {
             return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PHONE_REGISTERED);
         }
@@ -42,7 +43,6 @@ public class AdminServiceImpl implements AdminService {
         AdminDto adminDtoUsername = new AdminDto();
         adminDtoUsername.setUsername(adminDto.getUsername());
         List<AdminDto> checkByUsername = adminDao.get(adminDtoUsername);
-        logger.info("checkByUsername = " + checkByUsername);
         if (checkByUsername.size() != 0) {
             return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.USERNAME_REGISTERED);
         }
@@ -68,6 +68,33 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PASSWORD_WRONG);
         }
 
+        adminDto.setStatus(1);
+        int add = adminDao.add(adminDto);
+        Map<String,Object> res = new HashMap<>();
+        if (add == 1){
+            res.put("email",adminDto.getEmail());
+            res.put("phone",adminDto.getPhone());
+            res.put("username",adminDto.getUsername());
+        }
+
+        return ResponseEntityBuilder.buildNormalResponse(res);
+    }
+
+    @Override
+    public ResponseEntityDto login(AdminDto adminDto) {
+        String code = UUID.randomUUID().toString().replaceAll("-", "");
+//        UserDto user = userDao.getUserByPassword(userDto);
+//        if (user == null) {
+//        // Delete users_session based on userId and product
+//        List<UsersSessionDto> lists = usersSessionDao.findByUserId(userDto.getId());
+//        for (UsersSessionDto session : lists) {
+//            usersSessionDao.deleteByUserSessionId(session.getId());
+//        }
+//        // save user
+//        UsersSessionDto session = new UsersSessionDto();
+//        session.setCode(code);
+//        session.setUserId(userDto.getId());
+//        usersSessionDao.insert(session);
         adminDto.setStatus(1);
         int add = adminDao.add(adminDto);
         return ResponseEntityBuilder.buildNormalResponse(add);

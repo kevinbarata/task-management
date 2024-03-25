@@ -2,8 +2,10 @@ package com.project.resto.controller;
 
 import com.project.resto.dto.AdminDto;
 import com.project.resto.dto.AssetDto;
+import com.project.resto.dto.AuthDto;
 import com.project.resto.service.AdminService;
 import com.project.resto.service.AssetService;
+import com.project.resto.service.AuthService;
 import com.project.resto.util.ErrorCodeEnum;
 import com.project.resto.util.ResponseEntityBuilder;
 import com.project.resto.util.ResponseEntityDto;
@@ -25,12 +27,36 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private AuthService authService;
+
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseEntityDto register(@RequestBody AdminDto adminDto) {
         logger.info("admin.register parameter = " + adminDto);
         if (adminDto != null){
-            ResponseEntityDto register = adminService.register(adminDto);
-            return register;
+            //find code by email
+            AuthDto authDto = new AuthDto();
+            authDto.setEmail(adminDto.getEmail());
+            authDto.setCode(adminDto.getCode());
+            authDto.setType("Register");
+            AuthDto authDto1 = authService.findCodeByEmail(authDto);
+            if (authDto1 != null) {
+                ResponseEntityDto register = adminService.register(adminDto);
+                return register;
+            } else {
+                return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.AUTH_WRONG);
+            }
+        }else {
+            return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PARAM_VALUE_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto login(@RequestBody AdminDto adminDto) {
+        logger.info("admin.login parameter = " + adminDto);
+        if (adminDto != null){
+            ResponseEntityDto login = adminService.login(adminDto);
+            return login;
         }else {
             return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PARAM_VALUE_ERROR);
         }

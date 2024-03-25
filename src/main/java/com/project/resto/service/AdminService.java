@@ -10,6 +10,8 @@ public interface AdminService {
 
     ResponseEntityDto register(AdminDto adminDto);
 
+    ResponseEntityDto login(AdminDto adminDto);
+
     List<AdminDto> get(AdminDto adminDto);
 
     int update(AdminDto adminDto);
