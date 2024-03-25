@@ -56,6 +56,41 @@
         order by id desc
     </select>
 
+    <select id="getUserByPassword" resultType="com.project.resto.dto.AdminDto" parameterType="com.project.resto.dto.AdminDto">
+        SELECT  id as id,
+        email as email,
+        phone as phone,
+        username as username,
+        password as password,
+        remark as remark,
+        status as status,
+        create_time as createTime,
+        update_time as updateTime
+        FROM resto.admin
+        <where>
+            1=1
+            <if test="id != null and id != '' ">
+                and id = #{id}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+
+            and status = 1
+
+        </where>
+        limit 1
+    </select>
+
     <update id="update" parameterType="com.project.resto.dto.AdminDto">
         update resto.admin
         <set>

@@ -14,4 +14,6 @@ public interface AdminDao {
     List<AdminDto> get(AdminDto adminDto);
 
     int update(AdminDto adminDto);
+
+    AdminDto getUserByPassword(AdminDto adminDto);
 }

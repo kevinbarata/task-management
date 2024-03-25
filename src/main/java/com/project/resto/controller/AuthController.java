@@ -72,15 +72,4 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseEntityDto update(@RequestBody AuthDto authDto) {
-        logger.info("auth.update parameter = " + authDto);
-        if (authDto != null){
-            int update = authService.update(authDto);
-            return ResponseEntityBuilder.buildNormalResponse(update);
-        }else {
-            return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PARAM_VALUE_ERROR);
-        }
-    }
-
 }

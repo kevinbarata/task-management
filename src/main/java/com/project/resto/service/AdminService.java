@@ -1,6 +1,7 @@
 package com.project.resto.service;
 
 import com.project.resto.dto.AdminDto;
+import com.project.resto.dto.AdminSessionDto;
 import com.project.resto.dto.AssetDto;
 import com.project.resto.util.ResponseEntityDto;
 
@@ -13,6 +14,8 @@ public interface AdminService {
     ResponseEntityDto login(AdminDto adminDto);
 
     List<AdminDto> get(AdminDto adminDto);
+
+    int validateSession(AdminSessionDto adminSessionDto);
 
     int update(AdminDto adminDto);
 }

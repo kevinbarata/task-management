@@ -41,6 +41,11 @@ public class AdminController {
             authDto.setType("Register");
             AuthDto authDto1 = authService.findCodeByEmail(authDto);
             if (authDto1 != null) {
+                //otp already used
+                AuthDto authDto2 = new AuthDto();
+                authDto2.setId(authDto1.getId());
+                authDto2.setStatus(2);
+                authService.update(authDto2);
                 ResponseEntityDto register = adminService.register(adminDto);
                 return register;
             } else {

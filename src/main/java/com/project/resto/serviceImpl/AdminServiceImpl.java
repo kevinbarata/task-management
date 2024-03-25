@@ -1,11 +1,14 @@
 package com.project.resto.serviceImpl;
 
 import com.project.resto.dao.AdminDao;
+import com.project.resto.dao.AdminSessionDao;
 import com.project.resto.dao.AssetDao;
 import com.project.resto.dto.AdminDto;
+import com.project.resto.dto.AdminSessionDto;
 import com.project.resto.dto.AssetDto;
 import com.project.resto.service.AdminService;
 import com.project.resto.service.AssetService;
+import com.project.resto.token.TokenGenerator;
 import com.project.resto.util.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -23,6 +26,9 @@ public class AdminServiceImpl implements AdminService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private AdminDao adminDao;
+
+    @Autowired
+    private AdminSessionDao adminSessionDao;
 
     @Override
     public ResponseEntityDto register(AdminDto adminDto) {
@@ -82,22 +88,53 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseEntityDto login(AdminDto adminDto) {
-        String code = UUID.randomUUID().toString().replaceAll("-", "");
-//        UserDto user = userDao.getUserByPassword(userDto);
-//        if (user == null) {
-//        // Delete users_session based on userId and product
-//        List<UsersSessionDto> lists = usersSessionDao.findByUserId(userDto.getId());
-//        for (UsersSessionDto session : lists) {
-//            usersSessionDao.deleteByUserSessionId(session.getId());
-//        }
-//        // save user
-//        UsersSessionDto session = new UsersSessionDto();
-//        session.setCode(code);
-//        session.setUserId(userDto.getId());
-//        usersSessionDao.insert(session);
-        adminDto.setStatus(1);
-        int add = adminDao.add(adminDto);
-        return ResponseEntityBuilder.buildNormalResponse(add);
+        // finding user
+        AdminDto adminDtoEmail = new AdminDto();
+        adminDtoEmail.setEmail(adminDto.getEmail());
+        adminDtoEmail.setPassword(DigestUtils.md5Hex(adminDto.getPassword()));
+        AdminDto checkByEmail = adminDao.getUserByPassword(adminDtoEmail);
+        if (checkByEmail != null) {
+            AdminSessionDto adminSessionDto = new AdminSessionDto();
+            adminSessionDto.setUserId(checkByEmail.getId());
+            adminSessionDto.setToken(TokenGenerator.generateToken());
+            adminSessionDao.add(adminSessionDto);
+            return ResponseEntityBuilder.buildNormalResponse(adminSessionDto);
+        }
+
+        AdminDto adminDtoPhone = new AdminDto();
+        adminDtoPhone.setPhone(adminDto.getPhone());
+        adminDtoEmail.setPassword(DigestUtils.md5Hex(adminDto.getPassword()));
+        AdminDto checkByPhone = adminDao.getUserByPassword(adminDtoPhone);
+        if (checkByPhone != null) {
+            AdminSessionDto adminSessionDto = new AdminSessionDto();
+            adminSessionDto.setUserId(checkByEmail.getId());
+            adminSessionDto.setToken(TokenGenerator.generateToken());
+            adminSessionDao.add(adminSessionDto);
+            return ResponseEntityBuilder.buildNormalResponse(adminSessionDto);
+        }
+
+        AdminDto adminDtoUsername = new AdminDto();
+        adminDtoUsername.setUsername(adminDto.getUsername());
+        adminDtoEmail.setPassword(DigestUtils.md5Hex(adminDto.getPassword()));
+        AdminDto checkByUsername = adminDao.getUserByPassword(adminDtoUsername);
+        if (checkByUsername != null) {
+            AdminSessionDto adminSessionDto = new AdminSessionDto();
+            adminSessionDto.setUserId(checkByEmail.getId());
+            adminSessionDto.setToken(TokenGenerator.generateToken());
+            adminSessionDao.add(adminSessionDto);
+            return ResponseEntityBuilder.buildNormalResponse(adminSessionDto);
+        }
+
+        return ResponseEntityBuilder.buildNormalResponse();
+    }
+
+    @Override
+    public int validateSession (AdminSessionDto adminSessionDto) {
+        int sessionDto = adminSessionDao.validateSession(adminSessionDto);
+        if (sessionDto != 0){
+            return 1;
+        }
+        return 0;
     }
 
     @Override
