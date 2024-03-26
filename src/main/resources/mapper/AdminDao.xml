@@ -103,4 +103,12 @@
         WHERE id = #{id}
     </update>
 
+    <update id="changePassword" parameterType="com.project.resto.dto.AdminDto">
+        update resto.admin
+        <set>
+            <if test="password != null and password != ''">password = #{password},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
 </mapper>

@@ -3,9 +3,7 @@ package com.project.resto.serviceImpl;
 import com.project.resto.dao.AdminDao;
 import com.project.resto.dao.AdminSessionDao;
 import com.project.resto.dao.AssetDao;
-import com.project.resto.dto.AdminDto;
-import com.project.resto.dto.AdminSessionDto;
-import com.project.resto.dto.AssetDto;
+import com.project.resto.dto.*;
 import com.project.resto.service.AdminService;
 import com.project.resto.service.AssetService;
 import com.project.resto.token.TokenGenerator;
@@ -129,9 +127,56 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ResponseEntityDto logout(AdminSessionDto adminSessionDto) {
+        int kill = adminSessionDao.killSession(adminSessionDto);
+        return ResponseEntityBuilder.buildNormalResponse(kill);
+    }
+
+    @Override
+    public ResponseEntityDto changePassword(ChangePasswordDto changePasswordDto) {
+        // getuser by token
+        AdminSessionDto adminSessionDto = new AdminSessionDto();
+        adminSessionDto.setUserId(changePasswordDto.getUserId());
+        adminSessionDto.setToken(changePasswordDto.getToken());
+        AdminSessionDto validateSession = adminSessionDao.validateSession(adminSessionDto);
+        // find user By password
+        AdminDto adminDto = new AdminDto();
+        adminDto.setId(changePasswordDto.getId());
+        adminDto.setPassword(DigestUtils.md5Hex(changePasswordDto.getOldPassword()));
+        AdminDto matchPassword = adminDao.getUserByPassword(adminDto);
+        // match new password
+        String newPassword = matchPassword.getPassword();
+        int changePassword = 0;
+        if (changePasswordDto.getNewPassword().equals(changePasswordDto.getNewPasswordSecond()) && validateSession != null && matchPassword != null){
+            newPassword = DigestUtils.md5Hex(changePasswordDto.getNewPassword());
+            AdminDto change = new AdminDto();
+            change.setPassword(newPassword);
+            change.setId(matchPassword.getId());
+            changePassword = adminDao.changePassword(change);
+        }
+        return ResponseEntityBuilder.buildNormalResponse(changePassword);
+    }
+
+    @Override
+    public ResponseEntityDto forgetPassword(ForgetPasswordDto forgetPasswordDto) {
+        // match new password
+        String newPassword = "";
+        int changePassword = 0;
+        if (forgetPasswordDto.getNewPassword().equals(forgetPasswordDto.getNewPasswordSecond())){
+            newPassword = DigestUtils.md5Hex(forgetPasswordDto.getNewPassword());
+            AdminDto change = new AdminDto();
+            change.setPassword(newPassword);
+            change.setId(forgetPasswordDto.getUserId());
+            changePassword = adminDao.changePassword(change);
+        }
+        return ResponseEntityBuilder.buildNormalResponse(changePassword);
+    }
+
+
+    @Override
     public int validateSession (AdminSessionDto adminSessionDto) {
-        int sessionDto = adminSessionDao.validateSession(adminSessionDto);
-        if (sessionDto != 0){
+        AdminSessionDto sessionDto = adminSessionDao.validateSession(adminSessionDto);
+        if (sessionDto != null){
             return 1;
         }
         return 0;

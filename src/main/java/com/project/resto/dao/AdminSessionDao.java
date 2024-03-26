@@ -11,6 +11,8 @@ public interface AdminSessionDao {
 
     int add(AdminSessionDto adminSessionDto);
 
-    int validateSession(AdminSessionDto adminSessionDto);
+    AdminSessionDto validateSession(AdminSessionDto adminSessionDto);
+
+    int killSession(AdminSessionDto adminSessionDto);
 
 }

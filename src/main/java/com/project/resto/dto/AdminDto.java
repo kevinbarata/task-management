@@ -15,6 +15,7 @@ public class AdminDto {
     private String remark;
     private String adminType;
     private int code;
+    private String token;
 
     private Date createTime;
     private Date updateTime;

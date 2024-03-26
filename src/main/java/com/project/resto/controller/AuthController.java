@@ -42,7 +42,7 @@ public class AuthController {
             add.setCode(code);
             EmailDetails emailDetails = new EmailDetails();
                 Date today = new Date();
-            emailDetails.setSubject("Register Resto "+ today);
+            emailDetails.setSubject(authDto.getType() + " Resto "+ today);
             emailDetails.setTo(authDto.getEmail());
             String htmlMsg = "<p style='margin:5px 0;font-weight:400;font-size:16pt;'>This is your code :</p>";
                 htmlMsg += "<br>";

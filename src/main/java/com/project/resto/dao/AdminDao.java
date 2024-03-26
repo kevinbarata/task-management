@@ -2,6 +2,7 @@ package com.project.resto.dao;
 
 import com.project.resto.dto.AdminDto;
 import com.project.resto.dto.AssetDto;
+import com.project.resto.dto.ChangePasswordDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface AdminDao {
     int update(AdminDto adminDto);
 
     AdminDto getUserByPassword(AdminDto adminDto);
+
+    int changePassword(AdminDto adminDto);
 }

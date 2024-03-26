@@ -1,18 +1,20 @@
 package com.project.resto.dto;
 
-import com.project.resto.enumerate.AuthEnum;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class AuthDto {
+public class ChangePasswordDto {
     private Long id;
     private Long userId;
-    private String email;
-    private int code;
-    private String type;
-    private int status; // 1 masuk // 2 dipakai
+    private String oldPassword;
+    private String newPassword;
+    private String newPasswordSecond;
+    private String token;
+
     private Date createTime;
     private Date updateTime;
+
+
 }

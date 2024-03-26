@@ -37,4 +37,8 @@
         limit 1
     </select>
 
+    <delete id="killSession" parameterType="com.project.resto.dto.AdminSessionDto">
+        DELETE FROM resto.admin_session WHERE userId = #{userId} and token = #{token}
+    </delete>
+
 </mapper>

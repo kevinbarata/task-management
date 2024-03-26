@@ -21,17 +21,19 @@
     </insert>
 
     <select id="findCodeByEmail" resultType="com.project.resto.dto.AuthDto" parameterType="com.project.resto.dto.AuthDto">
-        SELECT  id as id,
-        email as email,
-        code as code,
-        status as status
-        FROM resto.auth
+        SELECT  a.id as id,
+        a.email as email,
+        a.code as code,
+        a.status as status,
+        b.id as userId
+        FROM resto.auth a
+        join resto.admin b on a.email = b.email
         where
-                email = #{email}
-                and code = #{code}
-                and type = #{type}
-                and status = 1
-        order by id desc limit 1
+                a.email = #{email}
+                and a.code = #{code}
+                and a.type = #{type}
+                and a.status = 1
+        order by a.id desc limit 1
     </select>
 
     <select id="get" resultType="com.project.resto.dto.AuthDto" parameterType="com.project.resto.dto.AuthDto">
