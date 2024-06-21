@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.teacher.dao.TeacherBiodataDao">
+
+    <insert id="insert" parameterType="com.project.teacher.dto.BiodataDto" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher.biodata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null and teacherId != ''">teacher_id,</if>
+            <if test="teacherName != null and teacherName != ''">teacher_name,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="marriageStatus != null and marriageStatus != ''">marriage_status,</if>
+            <if test="education != null and education!= ''">education,</if>
+
+            <if test="bornCity != null and bornCity != ''">born_city,</if>
+            <if test="birthDay != null and birthDay != ''">birth_day,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="district != null and district!= ''">district,</if>
+
+            <if test="address != null and address!= ''">address,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null and teacherId != ''">#{teacherId},</if>
+            <if test="teacherName != null and teacherName != ''">#{teacherName},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="marriageStatus != null and marriageStatus != ''">#{marriageStatus},</if>
+            <if test="education != null and education != ''">#{education},</if>
+
+            <if test="bornCity != null and bornCity != ''">#{bornCity},</if>
+            <if test="birthDay != null and birthDay != ''">#{birthDay},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="district != null and district != ''">#{district},</if>
+
+            <if test="address != null and address !=''">#{address},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.project.teacher.dto.BiodataDto">
+        update teacher.biodata
+        <set>
+            <if test="teacherName != null and teacherName != ''">
+                teacher_name = #{teacherName},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="marriageStatus != null and marriageStatus != ''">
+                marriage_status = #{marriageStatus},
+            </if>
+            <if test="education != null and education != ''">
+                education = #{education},
+            </if>
+
+            <if test="bornCity != null and bornCity != ''">
+                born_city = #{bornCity},
+            </if>
+            <if test="birthDay != null and birthDay != ''">
+                birth_day = #{birthDay},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="district != null and district != ''">
+                district = #{district},
+            </if>
+
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+        </set>
+        WHERE teacher_id = #{teacherId}
+    </update>
+
+    <select id="getBiodataByTeacherId" resultType="com.project.teacher.dto.BiodataDto" parameterType="com.project.teacher.dto.BiodataDto">
+        SELECT  id as id,
+                teacher_id as teacherId,
+                teacher_name as teacherName,
+                gender as gender,
+                marriage_status as marriageStatus,
+                education as education,
+                born_city as bornCity,
+                birth_day as birthDay,
+                province as province,
+                city as city,
+                district as district,
+                address as address,
+                create_time as createTime,
+                update_time as updateTime
+        FROM teacher.biodata
+        <where>
+            1=1
+            <if test="teacherId != null and teacherId != '' ">
+             and teacher_id = #{teacherId}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

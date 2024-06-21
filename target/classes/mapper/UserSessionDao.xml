@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.task.dao.UserSessionDao">
+<mapper namespace="com.project.teacher.dao.UserSessionDao">
 
-    <insert id="add" parameterType="com.project.task.dto.UserSessionDto" useGeneratedKeys="true" keyProperty="id">
-        insert into task.user_session
+    <insert id="add" parameterType="com.project.teacher.dto.UserSessionDto" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher.user_session
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null and userId != ''">user_id,</if>
             <if test="token != null and token != ''">token,</if>
@@ -16,13 +16,13 @@
         </trim>
     </insert>
 
-    <select id="validateSession" resultType="com.project.task.dto.UserSessionDto" parameterType="com.project.task.dto.UserSessionDto">
+    <select id="validateSession" resultType="com.project.teacher.dto.UserSessionDto" parameterType="com.project.teacher.dto.UserSessionDto">
         SELECT  id as id,
         user_id as userId,
         token as token,
         create_time as createTime,
         update_time as updateTime
-        FROM task.user_session
+        FROM teacher.user_session
         <where>
             1=1
             <if test="userId != null and userId != ''">
@@ -37,13 +37,13 @@
         limit 1
     </select>
 
-    <delete id="killSession" parameterType="com.project.task.dto.UserSessionDto">
-        DELETE FROM task.user_session WHERE user_id = #{userId} and token = #{token}
+    <delete id="killSession" parameterType="com.project.teacher.dto.UserSessionDto">
+        DELETE FROM teacher.user_session WHERE user_id = #{userId} and token = #{token}
     </delete>
 
-    <select id="isValidToken" resultType="java.lang.Integer" parameterType="com.project.task.dto.UserSessionDto">
+    <select id="isValidToken" resultType="java.lang.Integer" parameterType="com.project.teacher.dto.UserSessionDto">
         SELECT  count(id)
-        FROM task.user_session
+        FROM teacher.user_session
         <where>
             1=1
             <if test="token != null and token != ''">
